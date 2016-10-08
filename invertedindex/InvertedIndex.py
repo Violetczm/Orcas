@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-from string import punctuation, whitespace
+from util import NLProcessor
 
 
 class InvertedIndex(object):
@@ -29,30 +29,11 @@ class InMemoryInvertedIndex(InvertedIndex):
     def set_postings(self, term, postings):
         self.inverted_indexes_map[term] = postings
 
-    def tokenize_doc(self, document):
-        return set(term.lower() for term in document.split())
-
-    def process_linquistics(self, terms):
-        """
-        Normalize terms to be meaningful words (not any versions of "be" and not "be", and single letters)
-        """
-
-        s_filter_list = ['is', 'was', 'are', 'were', 'be', 'been', 'has', 'have', 'had', 'not', 'isnt', 'wasnt',
-                         'arnt',
-                         'werent', 'hasnt', 'havent', 'hadnt']
-
-        # remove punctuations and whitespaces
-        normalized_terms = [str(t).translate(None, punctuation).translate(None, whitespace) for t in terms]
-        # filter single letters
-        filtered_singulars = filter(lambda x: len(x) > 1, normalized_terms)
-        # filter out any versions of "be" and not "be", and return
-        return set(filtered_singulars) - set(s_filter_list)
-
     def index_terms(self):
         """
         index the normalized terms in a document into inverted indexes map
         """
-        [[self.set_postings(term, id) for term in self.process_linquistics(self.tokenize_doc(doc))] for id, doc in
+        [[self.set_postings(term, id) for term in NLProcessor.process(doc)] for id, doc in
          self.doc_store.dict.iteritems()]
 
 
