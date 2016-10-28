@@ -11,7 +11,6 @@ class TestInMemoryInvertedIndex(TestCase):
         :return:
         '''
         TestCase.setUp(self)
-        # Trying out code here:
         self.doc_store = InMemoryDocumentStore()
         self.doc_store.set_document('1', 'I did enact Julius Caesar: I was killed in the Capitol; Brutus killed me')
         self.doc_store.set_document('2', 'So let it be with Caesar. The noble Brutus hath told you Caesar was ambitious:')
